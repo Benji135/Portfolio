@@ -83,8 +83,8 @@ function App() {
         <Background />
         <Reveal_text />
       </div>
-      {/* <SelectedProj/>? */}
-      {/* <Contact/> */}
+      <SelectedProj/>
+      <Contact/>
     </div>
   );
 }

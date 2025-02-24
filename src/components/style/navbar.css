@@ -11,7 +11,7 @@
 
 .nav-screen{
     width: 700px;
-    height: 100%;
+    height: 110%;
 }
 
 .menu {
@@ -26,6 +26,7 @@
 
 .logo{
     font-size: 20px;
+    margin-left: 20px;
 }
 
 .offcanvas.offcanvas-end {
@@ -146,6 +147,7 @@
     .logo{
         font-weight: lighter;
         font-size: 20px;
+        margin-left: 0px;
     }
 }
 

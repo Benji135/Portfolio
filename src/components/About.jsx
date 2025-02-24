@@ -72,30 +72,30 @@ function Reveal_text() {
         tl.fromTo(
             headingRef.current,
             { opacity: 0, y: 100 },
-            { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+            { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }
         )
             .fromTo(
                 benjiRef.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
                 "-=1"
             )
             .fromTo(
                 abtRef1.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
                 "-=1"
             )
             .fromTo(
                 abtRef2.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
                 "-=1"
             )
             .fromTo(
                 buttonRef.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
                 "-=1"
             );
 
@@ -154,8 +154,8 @@ function Reveal_text() {
                 ) : (
                     // Desktop layout (Original order)
                     <div>
-                        <div className=" mt-8 p-5">
-                            <p className="para mt-[80px] italic opacity-70">This is me</p>
+                        <div className="p-2">
+                            <p className="para mt-[50px] italic opacity-70">This is me</p>
                             <hr className="bg-gray-400 h-[1px] w-full border-none" />
                         </div>
                         <div className="about flex justify-between">

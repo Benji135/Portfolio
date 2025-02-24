@@ -22,8 +22,10 @@ const Navbar = () => {
   useEffect(() => {
     if (isSmallScreen) {
       const navbar = document.querySelector('.navbar'); 
+      const menu = document.querySelector('.menu'); 
       if (navbar) {
         navbar.style.position = 'sticky'; // Use a valid CSS value
+        menu.innerHTML = "";
       }
     }
   }, [isSmallScreen]);
@@ -44,7 +46,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar fixed w-full flex items-center justify-between p-8 bg-transparent">
-      <div className="logo ml-7 text-white">Portfolio</div>
+      <div className="logo text-white">Portfolio</div>
       <div className="text-2xl cursor-pointer" onClick={toggleMenu}>
         <button className="text-white menubtn flex justify-between items-center m-3 mr-6">
           <p className="mb-1 mr-5 menu">menu</p>
