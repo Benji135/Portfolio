@@ -23,6 +23,7 @@ function App() {
         start: 'top top',
         end: '50%',
         scrub: true,
+        markers: 0,
       }
     });
 
@@ -82,8 +83,8 @@ function App() {
         <Background />
         <Reveal_text />
       </div>
-      <SelectedProj/>
-      <Contact/>
+      {/* <SelectedProj/>? */}
+      {/* <Contact/> */}
     </div>
   );
 }

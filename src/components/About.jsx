@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './style/reveal_text.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,6 +13,17 @@ function Reveal_text() {
     const abtRef1 = useRef(null);
     const abtRef2 = useRef(null);
 
+    // State to track screen width
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 800);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 800);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     useEffect(() => {
         const button = buttonRef.current;
 
@@ -46,11 +57,11 @@ function Reveal_text() {
         // GSAP Timeline
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: headingRef.current,
-                start: 'top 80%',
-                end: 'top top',
+                trigger: aboutRef.current,
+                start: '30% 80%',
+                end: 'bottom top',
                 scrub: false,
-                markers: false,
+                markers: 0,
                 onEnter: () => tl.play(),
                 onLeave: () => tl.reverse(),
                 onEnterBack: () => tl.play(),
@@ -61,30 +72,30 @@ function Reveal_text() {
         tl.fromTo(
             headingRef.current,
             { opacity: 0, y: 100 },
-            { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' }
+            { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
         )
             .fromTo(
                 benjiRef.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
-                "-=1"
-            )
-            .fromTo(
-                buttonRef.current,
-                { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
                 "-=1"
             )
             .fromTo(
                 abtRef1.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
                 "-=1"
             )
             .fromTo(
                 abtRef2.current,
                 { opacity: 0, y: 100 },
-                { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
+                "-=1"
+            )
+            .fromTo(
+                buttonRef.current,
+                { opacity: 0, y: 100 },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
                 "-=1"
             );
 
@@ -110,31 +121,69 @@ function Reveal_text() {
                         I believe in a user-centered design approach, ensuring that every project I work on is tailored to meet the specific needs of its users.
                     </h1>
                 </div>
-                <div className="line-break">
-                    <p className="ml-2 mb-3 italic opacity-70">This is me</p>
-                    <hr />
-                </div>
-                <div className="about flex justify-between">
-                    <div className="name-btn">
-                        <h2 ref={benjiRef}>Hi, I'm Benji.</h2>
-                        <button
-                            ref={buttonRef}
-                            className="touch bg-black text-white w-40 h-12 rounded-full mt-10"
-                            onClick={scrollToContact}
-                        >
-                            <i className="icon-arrow fa-solid fa-arrow-right mr-2 mt-1"></i>
-                            <span>Get in Touch</span>
-                        </button>
+
+                {/* Conditional Rendering Based on Screen Size */}
+                {isMobile ? (
+                    // Mobile layout (Button comes last)
+                    <div className="">
+                        <div className=" mt-8 p-5">
+                            <p className="para ml-2 italic opacity-70">This is me</p>
+                            <hr className="bg-gray-400 h-[1px] w-full border-none" />
+                        </div>
+                        <div className="about flex flex-col ">
+                            <h2 className='intro' ref={benjiRef}>Hi, I'm Abdullah.</h2>
+                            <div className="desc">
+                                <p className="mt-5 text-lg" ref={abtRef1}>
+                                    I'm a 21-year-old passionate fullstack web developer dedicated to turning ideas into creative solutions.
+                                </p>
+                                <p className="mt-5 text-lg" ref={abtRef2}>
+                                    I'm involved in every step of the process: from discovery and design to development, testing, and deployment.
+                                </p>
+                            </div>
+                            <button
+                                ref={buttonRef}
+                                className="touch bg-black text-white w-40 h-12 rounded-full mt-10"
+                                onClick={scrollToContact}
+                            >
+                                <i className="icon-arrow fa-solid fa-arrow-right mr-2 mt-1"></i>
+                                <span>Get in Touch</span>
+                            </button>
+                        </div>
+
                     </div>
-                    <div className="desc">
-                        <p className="mt-5 text-lg" ref={abtRef1}>
-                            I'm a 21-year-old passionate fullstack web developer dedicated to turning ideas into creative solutions. I specialize in creating seamless and intuitive user experiences.
-                        </p>
-                        <p className="mt-5 text-lg" ref={abtRef2}>
-                            I'm involved in every step of the process: from discovery and design to development, testing, and deployment. I focus on delivering high-quality, scalable results that drive positive user experiences.
-                        </p>
+                ) : (
+                    // Desktop layout (Original order)
+                    <div>
+                        <div className=" mt-8 p-5">
+                            <p className="para mt-[80px] italic opacity-70">This is me</p>
+                            <hr className="bg-gray-400 h-[1px] w-full border-none" />
+                        </div>
+                        <div className="about flex justify-between">
+                            <div className="name-btn">
+                                <h2 className='intro' ref={benjiRef}>Hi, I'm Abdullah.</h2>
+                                <button
+                                    ref={buttonRef}
+                                    className="touch bg-black text-white w-40 h-12 rounded-full mt-10"
+                                    onClick={scrollToContact}
+                                >
+                                    <i className="icon-arrow fa-solid fa-arrow-right mr-2 mt-1"></i>
+                                    <span>Get in Touch</span>
+                                </button>
+                            </div>
+                            <div className="desc">
+                                <p className="mt-5 text-lg" ref={abtRef1}>
+                                    I'm a 21-year-old passionate fullstack web developer dedicated to turning ideas into creative solutions. I specialize in creating seamless and intuitive user experiences.
+
+                                </p>
+                                <p className="mt-5 text-lg" ref={abtRef2}>
+                                    I'm involved in every step of the process: from discovery and design to development, testing, and deployment. I focus on delivering high-quality, scalable results that drive positive user experiences.
+
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                )}
             </div>
         </div>
     );

@@ -68,3 +68,60 @@ hr{
     padding: 0 10px 0 10px;
     color: rgba(0, 0, 0, 0.444);
 }
+/* sssssssssssssssssssssssssssssssssssssssssssssssss */
+
+/* Add this to your CSS */
+.project-image {
+    width: 100%; /* Ensure the image takes full width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    margin-bottom: 10px; /* Add spacing between image and title */
+  }
+  
+  /* Media query for small screens */
+  @media (max-width: 768px) {
+    .project-cont {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .proj69 {
+      width: 48%; /* Two images side by side with a small gap */
+      height: auto;
+      margin-bottom: 20px;
+      flex-direction: column; /* Stack image and title vertically */
+      align-items: center; /* Center align items */
+    }
+  
+    .project {
+      flex-direction: column; /* Stack image and title vertically */
+      align-items: center; /* Center align items */
+    }
+  
+    .project-name {
+      margin-top: 10px; /* Add spacing between image and title */
+    }
+  
+    .project-name h1 {
+      font-size: 30px; /* Adjust font size for smaller screens */
+    }
+  
+    .nump {
+      font-size: 20px;
+    }
+  
+    .descp {
+      font-size: 16px;
+    }
+  
+    hr {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 580px) {
+    .proj69 {
+      width: 100%; /* One image per row */
+    }
+}

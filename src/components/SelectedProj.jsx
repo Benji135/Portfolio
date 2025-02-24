@@ -10,7 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 function SelectedProj() {
   const [isScreenVisible, setScreenVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const projectScreenRef = useRef(null); // Ref for project screen for animation
+  const [isSmallScreen, setIsSmallScreen] = useState(false); // State to track screen size
+  const projectScreenRef = useRef(null);
 
   const popupRef = useRef(null);
   const projectContRef = useRef(null);
@@ -19,46 +20,53 @@ function SelectedProj() {
   const mousePos = useRef({ x: 900, y: 500 });
   const speed = 0.1;
 
+  // Function to check screen size
+  const checkScreenSize = () => {
+    setIsSmallScreen(window.innerWidth <= 768); // Set to true if screen width is <= 768px
+  };
+
+  useEffect(() => {
+    checkScreenSize(); // Check screen size on initial render
+    window.addEventListener('resize', checkScreenSize); // Update on resize
+
+    return () => {
+      window.removeEventListener('resize', checkScreenSize); // Cleanup
+    };
+  }, []);
+
   const showProjectScreen = (title, event) => {
-    setSelectedProject(title);  // Store the selected project
-    setScreenVisible(true);     // Mark as visible to trigger the animation
+    setSelectedProject(title);
+    setScreenVisible(true);
 
     const clickX = event.clientX;
     const clickY = event.clientY;
 
-    // GSAP animation: from small circle at click point to full-screen
-    gsap.fromTo(projectScreenRef.current, 
-      { 
-        clipPath: `circle(0% at ${clickX}px ${clickY}px)`,  // Small circle at click position
-      },
-      { 
-        clipPath: 'circle(150% at 50% 50%)', // Expands to cover the screen
-        duration: 3, 
-        ease: 'power3.out'
-      }
+    gsap.fromTo(
+      projectScreenRef.current,
+      { clipPath: `circle(0% at ${clickX}px ${clickY}px)` },
+      { clipPath: 'circle(150% at 50% 50%)', duration: 3, ease: 'power3.out' }
     );
   };
 
   const hideProjectScreen = () => {
-    // GSAP animation to hide the screen, back to a small circle
-    gsap.to(projectScreenRef.current, 
-      { 
-        clipPath: 'circle(0% at 50% 50%)', // Shrinks back to the center
-        duration: 0.5, 
-        ease: 'power3.out', 
-        onComplete: () => setScreenVisible(false) 
-      }
-    );
+    gsap.to(projectScreenRef.current, {
+      clipPath: 'circle(0% at 50% 50%)',
+      duration: 0.5,
+      ease: 'power3.out',
+      onComplete: () => setScreenVisible(false),
+    });
   };
 
   useEffect(() => {
+    if (isSmallScreen) return; // Skip GSAP hover effect for small screens
+
     const projectCont = projectContRef.current;
     const popup = popupRef.current;
 
     const showPopup = () => {
       popup.style.display = 'flex';
       setTimeout(() => {
-        popup.style.transform = 'scale(1)'; 
+        popup.style.transform = 'scale(1)';
       }, 300);
     };
 
@@ -106,34 +114,6 @@ function SelectedProj() {
     projectCont.addEventListener('mouseenter', showPopup);
     projectCont.addEventListener('mouseleave', hidePopup);
 
-    // GSAP Timeline for reveal and reverse animations
-    projectRefs.current.forEach((project, index) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: project,
-          start: 'top 95%',
-          end: 'top top',
-          scrub: false,
-          markers: false,
-          onEnter: () => tl.play(),
-          onLeave: () => tl.reverse(),
-          onEnterBack: () => tl.play(),
-          onLeaveBack: () => tl.reverse(),
-        },
-      });
-
-      tl.fromTo(
-        project,
-        { opacity: 0, y: 100 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.5,
-          ease: 'power3.out',
-        }
-      );
-    });
-
     return () => {
       projectCont.removeEventListener('mousemove', updateMousePosition);
       projectCont.removeEventListener('mouseenter', showPopup);
@@ -144,25 +124,28 @@ function SelectedProj() {
         }
       });
     };
-  }, []); 
+  }, [isSmallScreen]); // Re-run effect when isSmallScreen changes
 
   return (
     <div className='project-bg' id='projects'>
       {isScreenVisible && (
-        <ProjectScreen 
-          ref={projectScreenRef} 
-          selectedProject={selectedProject} 
-          onClose={hideProjectScreen} 
+        <ProjectScreen
+          ref={projectScreenRef}
+          selectedProject={selectedProject}
+          onClose={hideProjectScreen}
         />
       )}
 
-      <Popup ref={popupRef} imgRefs={imgRefs} />
+      {!isSmallScreen && <Popup ref={popupRef} imgRefs={imgRefs} />}
 
       <h2>Selected Projects</h2>
 
       <div className='project-cont' ref={projectContRef}>
         {['Maze Escape', 'Machine Learning', 'Online Store App', 'Portfolio'].map((title, index) => (
           <div className='proj69' ref={(el) => (projectRefs.current[index] = el)} key={index}>
+            {isSmallScreen && (
+              <img src="./assets/game.png" alt={title} className="project-image" />
+            )}
             <div className='project' onClick={(e) => showProjectScreen(title, e)}>
               <div className='project-name'>
                 <p className='nump'>{`0${index + 1}`}</p>
@@ -172,7 +155,7 @@ function SelectedProj() {
                 <p className='descp'>{getCategory(title)}</p>
               </div>
             </div>
-            <hr className='line'/>
+            <hr className='line' />
           </div>
         ))}
       </div>
@@ -196,4 +179,4 @@ function getCategory(title) {
   }
 }
 
-export default SelectedProj;
+export default SelectedProj;
